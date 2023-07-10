@@ -47,11 +47,11 @@ public class Product {
         this.id = id;
     }
 
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NotNull String name) {
         this.name = name;
     }
 
@@ -63,27 +63,27 @@ public class Product {
         this.description = description;
     }
 
-    public String getCategory() {
+    public @NotNull String getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(@NotNull String category) {
         this.category = category;
     }
 
-    public Double getPrice() {
+    public @NotNull Double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(@NotNull Double price) {
         this.price = price;
     }
 
-    public String getStatus() {
+    public @NotNull String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(@NotNull String status) {
         this.status = status;
     }
 }
