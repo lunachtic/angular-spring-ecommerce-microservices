@@ -8,6 +8,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDateTime;
+
 @SQLDelete(sql = "UPDATE Course SET status = 'Inactive' WHERE id=?")
 @Where(clause = "status <> 'Inactive'")
 @Entity
@@ -38,6 +40,10 @@ public class Product {
     @NotNull
     @Column(length = 8, nullable = false)
     private String status = "Active";
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
     public Long getId() {
         return id;
@@ -85,5 +91,21 @@ public class Product {
 
     public void setStatus(@NotNull String status) {
         this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
