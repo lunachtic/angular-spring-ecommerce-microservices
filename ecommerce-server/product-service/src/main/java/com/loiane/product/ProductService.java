@@ -30,4 +30,10 @@ public class ProductService {
         List<ProductDTO> productDTOList = productPage.stream().map(productMapper::toDTO).toList();
         return new ProductPageDTO(productDTOList, productPage.getTotalElements(), productPage.getTotalPages());
     }
+
+    public ProductDTO create(ProductDTO productDTO) {
+        Product product = productMapper.toEntity(productDTO);
+        Product savedProduct = productRepository.save(product);
+        return productMapper.toDTO(savedProduct);
+    }
 }
