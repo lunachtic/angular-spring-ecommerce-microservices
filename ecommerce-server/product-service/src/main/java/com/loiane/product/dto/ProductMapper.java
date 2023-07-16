@@ -10,7 +10,8 @@ public class ProductMapper {
         Product product = new Product();
         product.setId(productDTO.id());
         product.setName(productDTO.name());
-        product.setPrice(productDTO.price());
+        product.setDescription(productDTO.description());
+        product.setCategory(productDTO.category());
         product.setPrice(productDTO.price());
         return product;
     }
