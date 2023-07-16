@@ -23,7 +23,7 @@ public class ProductController {
 
     @GetMapping
     public ProductPageDTO findAll(@RequestParam(defaultValue = "0") @PositiveOrZero int page,
-                                  @RequestParam(defaultValue = "10") @Positive @Max(1000) int pageSize) {
+                                  @RequestParam(defaultValue = "10") @Positive @Max(100) int pageSize) {
         return productService.findAll(page, pageSize);
     }
 
