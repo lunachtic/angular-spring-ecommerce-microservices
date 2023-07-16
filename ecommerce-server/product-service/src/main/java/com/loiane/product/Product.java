@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 
-@SQLDelete(sql = "UPDATE Course SET status = 'Inactive' WHERE id=?")
+@SQLDelete(sql = "UPDATE product SET status = 'Inactive' WHERE id=?")
 @Where(clause = "status <> 'Inactive'")
 @Entity
 public class Product {
@@ -44,6 +44,16 @@ public class Product {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    public Product() {
+    }
+
+    public Product(@NotNull String name, String description, @NotNull String category, @NotNull Double price) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.price = price;
+    }
 
     public Long getId() {
         return id;
