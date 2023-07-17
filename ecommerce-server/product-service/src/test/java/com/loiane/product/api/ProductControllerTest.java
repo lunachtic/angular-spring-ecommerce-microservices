@@ -183,7 +183,7 @@ class ProductControllerTest extends BaseIntegrationTest {
     }
 
     /**
-     * Method under test: {@link ProductController#update(ProductDTO)}
+     * Method under test: {@link ProductController#update(long, ProductDTO)}
      */
     @DisplayName("Should return 400 status when updating a product with invalid data")
     @ParameterizedTest(name = "Should return 400 status when updating a product with invalid data: {0}")
@@ -195,6 +195,66 @@ class ProductControllerTest extends BaseIntegrationTest {
 
         // when
         ResponseEntity<String> responseEntity = testRestTemplate.exchange(BASE_URL + "/" + product.getId(), HttpMethod.PUT, new HttpEntity<>(productDTO), String.class);
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    /**
+     * Method under test: {@link ProductController#update(long, ProductDTO)}
+     */
+    @Test
+    @DisplayName("Should return 400 status when updating a product with invalid path variable")
+    void updateInvalidPathVariable() {
+        // given
+        ProductDTO productDTO = new ProductDTO(null, "Product Name", "description", "technology", 10.0);
+
+        // when
+        ResponseEntity<String> responseEntity = testRestTemplate.exchange(BASE_URL + "/-1", HttpMethod.PUT, new HttpEntity<>(productDTO), String.class);
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    /**
+     * Method under test: {@link ProductController#delete(long)}
+     */
+    @Test
+    @DisplayName("Should delete a product")
+    void delete() {
+        // given
+        Product product = new Product("Product Name", "description", "technology", 10.0);
+        productRepository.save(product);
+
+        // when
+        ResponseEntity<Void> responseEntity = testRestTemplate.exchange(BASE_URL + "/" + product.getId(), HttpMethod.DELETE, null, Void.class);
+
+        // then
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        assertFalse(productRepository.findById(product.getId()).isPresent());
+    }
+
+    /**
+     * Method under test: {@link ProductController#delete(long)}
+     */
+    @Test
+    @DisplayName("Should return 404 status when deleting a product that does not exist")
+    void deleteNotFound() {
+        // when
+        ResponseEntity<Void> responseEntity = testRestTemplate.exchange(BASE_URL + "/1", HttpMethod.DELETE, null, Void.class);
+
+        // then
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    /**
+     * Method under test: {@link ProductController#delete(long)}
+     */
+    @Test
+    @DisplayName("Should return 400 status when deleting a product with invalid path variable")
+    void deleteInvalidPathVariable() {
+        // when
+        ResponseEntity<Void> responseEntity = testRestTemplate.exchange(BASE_URL + "/-1", HttpMethod.DELETE, null, Void.class);
 
         // then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());

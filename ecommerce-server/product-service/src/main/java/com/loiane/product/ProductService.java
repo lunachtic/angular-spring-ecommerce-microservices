@@ -34,7 +34,7 @@ public class ProductService {
         return new ProductPageDTO(productDTOList, productPage.getTotalElements(), productPage.getTotalPages());
     }
 
-    public ProductDTO findById(long id) {
+    public ProductDTO findById(@Positive long id) {
         return productRepository.findById(id).map(productMapper::toDTO).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
@@ -44,7 +44,7 @@ public class ProductService {
         return productMapper.toDTO(savedProduct);
     }
 
-    public ProductDTO update(long id, ProductDTO productDTO) {
+    public ProductDTO update(@Positive long id, @NotNull ProductDTO productDTO) {
         return productRepository.findById(id)
                 .map(product -> {
                     product.setName(productDTO.name());
@@ -56,5 +56,10 @@ public class ProductService {
                     return productMapper.toDTO(updatedProduct);
                 })
                 .orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    public void delete(@Positive long id) {
+        productRepository.delete(productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id)));
     }
 }
