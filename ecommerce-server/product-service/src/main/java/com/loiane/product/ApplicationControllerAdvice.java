@@ -1,6 +1,7 @@
 package com.loiane.product;
 
 import com.loiane.product.exception.ProductNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,5 +17,11 @@ public class ApplicationControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFoundException(ProductNotFoundException e) {
         return e.getMessage();
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleConstraintViolationException(ConstraintViolationException e) {
+        return "Not valid due to validation error: " + e.getMessage();
     }
 }

@@ -29,6 +29,8 @@ public class Product {
     private String description;
 
     @NotNull
+    @NotBlank
+    @Length(min = 3, max = 10)
     @Column(length = 10, nullable = false)
     private String category;
 
