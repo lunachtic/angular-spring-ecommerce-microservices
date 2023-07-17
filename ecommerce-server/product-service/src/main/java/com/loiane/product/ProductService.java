@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -41,5 +42,19 @@ public class ProductService {
         Product product = productMapper.toEntity(productDTO);
         Product savedProduct = productRepository.save(product);
         return productMapper.toDTO(savedProduct);
+    }
+
+    public ProductDTO update(long id, ProductDTO productDTO) {
+        return productRepository.findById(id)
+                .map(product -> {
+                    product.setName(productDTO.name());
+                    product.setDescription(productDTO.description());
+                    product.setCategory(productDTO.category());
+                    product.setPrice(productDTO.price());
+                    product.setUpdatedAt(LocalDateTime.now());
+                    Product updatedProduct = productRepository.save(product);
+                    return productMapper.toDTO(updatedProduct);
+                })
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 }

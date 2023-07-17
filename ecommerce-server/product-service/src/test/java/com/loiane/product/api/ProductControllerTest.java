@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -132,8 +134,6 @@ class ProductControllerTest extends BaseIntegrationTest {
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
-
-
     static Stream<Arguments> invalidProductDTOList() {
         return Stream.of(
                 Arguments.arguments(new ProductDTO(null, null, null, null, null)),
@@ -155,5 +155,48 @@ class ProductControllerTest extends BaseIntegrationTest {
                 Arguments.arguments(new ProductDTO(null, VALID_NAME, VALID_DESCRIPTION, VALID_CATEGORY, -1.0)),
                 Arguments.arguments(new ProductDTO(null, VALID_NAME, VALID_DESCRIPTION, VALID_CATEGORY, 0.0))
         );
+    }
+
+    /**
+     * Method under test: {@link ProductController#update(long, ProductDTO)}
+     */
+    @Test
+    @DisplayName("Should update a product")
+    void update() {
+        // given
+        Product product = new Product("Product Name", "description", "technology", 10.0);
+        productRepository.save(product);
+
+        ProductDTO productDTO = new ProductDTO(product.getId(), "Product Name Updated", "description updated", "book", 20.0);
+
+        // when
+        ResponseEntity<ProductDTO> responseEntity = testRestTemplate.exchange(BASE_URL + "/" + product.getId(), HttpMethod.PUT, new HttpEntity<>(productDTO), ProductDTO.class);
+
+        // then
+        Product updatedProduct = productRepository.findById(product.getId()).orElseThrow();
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(product.getId(), updatedProduct.getId());
+        assertEquals(productDTO.name(), updatedProduct.getName());
+        assertEquals(productDTO.description(), updatedProduct.getDescription());
+        assertEquals(productDTO.category(), updatedProduct.getCategory());
+        assertEquals(productDTO.price(), updatedProduct.getPrice());
+    }
+
+    /**
+     * Method under test: {@link ProductController#update(ProductDTO)}
+     */
+    @DisplayName("Should return 400 status when updating a product with invalid data")
+    @ParameterizedTest(name = "Should return 400 status when updating a product with invalid data: {0}")
+    @MethodSource("invalidProductDTOList")
+    void updateInvalid(ProductDTO productDTO) {
+        // given
+        Product product = new Product("Product Name", "description", "technology", 10.0);
+        productRepository.save(product);
+
+        // when
+        ResponseEntity<String> responseEntity = testRestTemplate.exchange(BASE_URL + "/" + product.getId(), HttpMethod.PUT, new HttpEntity<>(productDTO), String.class);
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 }
