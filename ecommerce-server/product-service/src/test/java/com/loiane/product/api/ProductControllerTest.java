@@ -7,10 +7,14 @@ import com.loiane.product.dto.ProductDTO;
 import com.loiane.product.dto.ProductPageDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductControllerTest extends BaseIntegrationTest {
+
+    private final String BASE_URL = "/api/products";
 
     /**
      * Method under test: {@link ProductController#create(ProductDTO)}
@@ -21,7 +25,7 @@ class ProductControllerTest extends BaseIntegrationTest {
         ProductDTO productDTO = new ProductDTO(null, "Product Name", "description", "technology", 10.0);
 
         // when
-        ProductDTO createdProductDTO = testRestTemplate.postForObject("/api/products", productDTO, ProductDTO.class);
+        ProductDTO createdProductDTO = testRestTemplate.postForObject(BASE_URL, productDTO, ProductDTO.class);
 
         // then
         assertNotNull(createdProductDTO);
@@ -30,6 +34,44 @@ class ProductControllerTest extends BaseIntegrationTest {
         assertEquals(productDTO.description(), createdProductDTO.description());
         assertEquals(productDTO.category(), createdProductDTO.category());
         assertEquals(productDTO.price(), createdProductDTO.price());
+    }
+
+    /**
+     * Method under test: {@link ProductController#findById(long)}
+     */
+    @Test
+    @DisplayName("Should return a product by id when product exists")
+    void findById() {
+        // given
+        Product product = new Product("Product Name", "description", "technology", 10.0);
+        productRepository.save(product);
+
+        // when
+        ProductDTO productDTO = testRestTemplate.getForObject(BASE_URL + "/" + product.getId(), ProductDTO.class);
+
+        // then
+        assertNotNull(productDTO);
+        assertEquals(product.getId(), productDTO.id());
+        assertEquals(product.getName(), productDTO.name());
+        assertEquals(product.getDescription(), productDTO.description());
+        assertEquals(product.getCategory(), productDTO.category());
+        assertEquals(product.getPrice(), productDTO.price());
+    }
+
+    /**
+     * Method under test: {@link ProductController#findById(long)}
+     */
+    @Test
+    @DisplayName("Should return an exception when searching for a product by id that does not exist")
+    void findByIdNotFound() {
+        // given
+        long id = 1L;
+
+        // when
+        var responseEntity = testRestTemplate.getForEntity(BASE_URL + "/" + id, String.class);
+
+        // then
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
     /**
@@ -43,7 +85,7 @@ class ProductControllerTest extends BaseIntegrationTest {
         productRepository.save(product);
 
         // when
-        ProductPageDTO productPageDTO = testRestTemplate.getForObject("/api/products", ProductPageDTO.class);
+        ProductPageDTO productPageDTO = testRestTemplate.getForObject(BASE_URL, ProductPageDTO.class);
 
         // then
         assertNotNull(productPageDTO);

@@ -27,9 +27,15 @@ public class ProductController {
         return productService.findAll(page, pageSize);
     }
 
+    @GetMapping("/{id}")
+    public ProductDTO findById(@PathVariable @Positive long id) {
+        return productService.findById(id);
+    }
+
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public ProductDTO create(@RequestBody @Valid ProductDTO productDTO) {
         return productService.create(productDTO);
     }
+
 }
