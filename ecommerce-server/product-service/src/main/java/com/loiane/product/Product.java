@@ -1,5 +1,7 @@
 package com.loiane.product;
 
+import com.loiane.product.enums.Status;
+import com.loiane.product.enums.StatusConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -40,8 +42,9 @@ public class Product {
     private Double price;
 
     @NotNull
+    @Convert(converter = StatusConverter.class)
     @Column(length = 8, nullable = false)
-    private String status = "Active";
+    private Status status = Status.ACTIVE;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -97,11 +100,11 @@ public class Product {
         this.price = price;
     }
 
-    public @NotNull String getStatus() {
+    public @NotNull Status getStatus() {
         return status;
     }
 
-    public void setStatus(@NotNull String status) {
+    public void setStatus(@NotNull Status status) {
         this.status = status;
     }
 
