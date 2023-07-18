@@ -37,6 +37,55 @@ class ProductControllerTest extends BaseIntegrationTest {
             """;
 
     /**
+     * Method under test: {@link ProductController#findAll(int, int)}
+     */
+    @Test
+    @DisplayName("Should return a list of products using pagination")
+    void findAll() {
+        // given
+        Product product = new Product("Product Name", "description", "technology", 10.0);
+        productRepository.save(product);
+
+        // when
+        ProductPageDTO productPageDTO = testRestTemplate.getForObject(BASE_URL, ProductPageDTO.class);
+
+        // then
+        assertNotNull(productPageDTO);
+        assertEquals(1, productPageDTO.totalElements());
+        assertEquals(1, productPageDTO.totalPages());
+        assertEquals(1, productPageDTO.products().size());
+        assertTrue(productPageDTO.products().get(0).id() > 0);
+        assertEquals(product.getName(), productPageDTO.products().get(0).name());
+        assertEquals(product.getDescription(), productPageDTO.products().get(0).description());
+        assertEquals(product.getCategory(), productPageDTO.products().get(0).category());
+        assertEquals(product.getPrice(), productPageDTO.products().get(0).price());
+    }
+
+    /**
+     * Method under test: {@link ProductController#findAll(int, int)}
+     */
+    @DisplayName("Should return 400 status when paging parameters are invalid")
+    @ParameterizedTest(name = "Should return 400 when paging parameters are invalid page: {0} and size: {1}")
+    @MethodSource("invalidPageParameters")
+    void findAllPageLessThanZero(int page, int size) {
+        // when
+        ResponseEntity<String> responseEntity = testRestTemplate.getForEntity(BASE_URL + "?page=" + page + "&pageSize=" + size, String.class);
+
+        // then
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    static Stream<Arguments> invalidPageParameters() {
+        return Stream.of(
+                Arguments.of(-1, 1),
+                Arguments.of(0, 0),
+                Arguments.of(0, -1),
+                Arguments.of(-1, -1),
+                Arguments.of(0, 101)
+        );
+    }
+
+    /**
      * Method under test: {@link ProductController#findById(long)}
      */
     @Test
@@ -75,28 +124,16 @@ class ProductControllerTest extends BaseIntegrationTest {
     }
 
     /**
-     * Method under test: {@link ProductController#findAll(int, int)}
+     * Method under test: {@link ProductController#findById(long)}
      */
     @Test
-    @DisplayName("Should return a list of products using pagination")
-    void findAll() {
-        // given
-        Product product = new Product("Product Name", "description", "technology", 10.0);
-        productRepository.save(product);
-
+    @DisplayName("Should return 404 status when searching for a product by id with invalid path variable")
+    void findByIdInvalidPathVariable() {
         // when
-        ProductPageDTO productPageDTO = testRestTemplate.getForObject(BASE_URL, ProductPageDTO.class);
+        var responseEntity = testRestTemplate.getForEntity(BASE_URL + "/-1", String.class);
 
         // then
-        assertNotNull(productPageDTO);
-        assertEquals(1, productPageDTO.totalElements());
-        assertEquals(1, productPageDTO.totalPages());
-        assertEquals(1, productPageDTO.products().size());
-        assertTrue(productPageDTO.products().get(0).id() > 0);
-        assertEquals(product.getName(), productPageDTO.products().get(0).name());
-        assertEquals(product.getDescription(), productPageDTO.products().get(0).description());
-        assertEquals(product.getCategory(), productPageDTO.products().get(0).category());
-        assertEquals(product.getPrice(), productPageDTO.products().get(0).price());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     /**

@@ -4,6 +4,7 @@ import com.loiane.product.dto.ProductDTO;
 import com.loiane.product.dto.ProductMapper;
 import com.loiane.product.dto.ProductPageDTO;
 import com.loiane.product.exception.ProductNotFoundException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -38,13 +39,13 @@ public class ProductService {
         return productRepository.findById(id).map(productMapper::toDTO).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
-    public ProductDTO create(@NotNull ProductDTO productDTO) {
+    public ProductDTO create(@Valid @NotNull ProductDTO productDTO) {
         Product product = productMapper.toEntity(productDTO);
         Product savedProduct = productRepository.save(product);
         return productMapper.toDTO(savedProduct);
     }
 
-    public ProductDTO update(@Positive long id, @NotNull ProductDTO productDTO) {
+    public ProductDTO update(@Positive long id, @Valid @NotNull ProductDTO productDTO) {
         return productRepository.findById(id)
                 .map(product -> {
                     product.setName(productDTO.name());
