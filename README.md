@@ -4,7 +4,7 @@ This is a sample e-commerce application for educational purposes using Spring mi
 
 ## 💻 Tecnologies
 
-- Java 17+
+- Java 20+
 - Spring Boot 3 (Spring 6)
 - Maven
 - MySQL
