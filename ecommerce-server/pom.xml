@@ -25,7 +25,8 @@
 
 	<modules>
 		<module>product-service</module>
-	</modules>
+        <module>inventory-service</module>
+    </modules>
 
 	<dependencyManagement>
 		<dependencies>
