@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProductControllerTest extends BaseIntegrationTest {
 
-    private final String BASE_URL = "/api/products";
+    private static final String BASE_URL = "/api/products";
 
     private static final String VALID_NAME = "Product Name";
     private static final String VALID_DESCRIPTION = "description";
