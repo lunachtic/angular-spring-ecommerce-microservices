@@ -1,5 +1,6 @@
 package com.loiane.inventory;
 
+import com.loiane.inventory.dto.InventoryDTO;
 import jakarta.validation.constraints.Positive;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class InventoryController {
     }
 
     @GetMapping("/{productId}")
-    public Inventory getInventoryByProductId(@PathVariable @Positive long productId) {
+    public InventoryDTO getInventoryByProductId(@PathVariable @Positive long productId) {
         return inventoryService.getInventoryByProductId(productId);
     }
 }
