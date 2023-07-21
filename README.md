@@ -15,10 +15,10 @@ This is a sample e-commerce application for educational purposes using Spring mi
 ### Backend
 
 - 🚧 API Gateway (Spring Cloud)
-- 🚧 Discovery Service (Eureka)
+- ✅ Discovery Service (Eureka)
 - 🚧 Auth Service
-- 🚧 Product Catalog Service
-- 🚧 Inventory Service
+- ✅ Product Catalog Service
+- ✅ Inventory Service
 - 🚧 Cart Service
 - 🚧 Payment Service
 - 🚧 Order Service
