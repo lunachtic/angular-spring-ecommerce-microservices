@@ -1,5 +1,7 @@
 package com.loiane.product;
 
+import com.loiane.product.contract.Inventory;
+import com.loiane.product.contract.InventoryClient;
 import com.loiane.product.dto.ProductDTO;
 import com.loiane.product.dto.ProductPageDTO;
 import jakarta.validation.Valid;
@@ -17,8 +19,11 @@ public class ProductController {
 
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
+    private final InventoryClient inventoryClient;
+
+    public ProductController(ProductService productService, InventoryClient inventoryClient) {
         this.productService = productService;
+        this.inventoryClient = inventoryClient;
     }
 
     @GetMapping
@@ -29,6 +34,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ProductDTO findById(@PathVariable @Positive long id) {
+        Inventory inventory = inventoryClient.getInventoryByProductId(id);
         return productService.findById(id);
     }
 
