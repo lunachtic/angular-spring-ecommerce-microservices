@@ -1,4 +1,8 @@
 services:
+  discovery-service:
+    image: 'discovery-service:0.0.1-SNAPSHOT'
+    ports:
+      - '8761:8761'
   mysql:
     image: 'mysql:latest'
     environment:
@@ -15,4 +19,4 @@ services:
       - 'MONGO_INITDB_ROOT_PASSWORD=secret'
       - 'MONGO_INITDB_ROOT_USERNAME=root'
     ports:
-      - '27017'
+      - '27017:27017'
