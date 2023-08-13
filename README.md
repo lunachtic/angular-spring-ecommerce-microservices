@@ -2,6 +2,8 @@
 
 This is a sample e-commerce application for educational purposes using Spring micro-services in the backend and Angular micro-frontends.
 
+![Java Build](https://github.com/loiane/angular-spring-ecommerce-microservices/actions/workflows/maven.yml/badge.svg?branch=main)
+
 ## 💻 Tecnologies
 
 - Java 20+
