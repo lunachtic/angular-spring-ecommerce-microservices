@@ -1,8 +1,8 @@
-GET http://localhost:52466/api/inventory/1
+GET http://localhost:61452/api/inventory/1
 Accept: application/json
 
 ###
-POST http://localhost:52466/api/inventory
+POST http://localhost:61452/api/inventory
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:52410/api/products
+POST http://localhost:61615/api/products
 Content-Type: application/json
 
 {
@@ -22,5 +22,8 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:52410/api/products
+GET http://localhost:61615/api/products/1
+
+###
+GET http://localhost:61615/api/products
 
