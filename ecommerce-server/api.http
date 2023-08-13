@@ -1,0 +1,26 @@
+GET http://localhost:52466/api/inventory/1
+Accept: application/json
+
+###
+POST http://localhost:52466/api/inventory
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 10
+}
+
+###
+POST http://localhost:52410/api/products
+Content-Type: application/json
+
+{
+    "name": "Product 1",
+    "description": "Description 1",
+    "category": "Category 1",
+    "price": 10.0
+}
+
+###
+GET http://localhost:52410/api/products
+
